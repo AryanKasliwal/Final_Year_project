@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 from tqdm import tqdm
+import magenta
 
 from livelossplot import PlotLosses
 from livelossplot.outputs import MatplotlibPlot
@@ -42,3 +43,8 @@ assert len(programs) == len(is_drums), (
     "Lengths of programs, is_drums and track_names must be the same."
 )
 
+# song_dir = 
+
+import tensorflow as tf
+
+print(tf.__version__)
