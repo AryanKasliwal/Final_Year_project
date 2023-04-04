@@ -1,8 +1,8 @@
 import http.server
 import socketserver
 import os
-from drums_rnn_generate import main
-from drums_rnn_generate import run_with_flags
+#from drums_rnn_generate import main
+#from drums_rnn_generate import run_with_flags
 # import audio_processing
 
 # Change this to serve on a different port
@@ -32,9 +32,12 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
 def generate_drums(input_file):
-    os.system(f'cmd /k "drums_rnn_generate --config=drum_kit --run_dir=/tmp/drums_rnn/logdir/run_test --hparams="batch_size=64,rnn_layer_sizes=[256, 256]" --output_dir=/tmp/drums_rnn/generated_test --num_outputs=10 --num_steps=128 --primer_midi={input_file}"')
+    os.system(f'cmd /k "drums_rnn_generate --config=drum_kit --run_dir=/tmp/drums_rnn/logdir/run2 --hparams="batch_size=64,rnn_layer_sizes=[256, 256]" --output_dir=/tmp/drums_rnn/generated_test --num_outputs=10 --num_steps=512 --primer_midi={input_file}"')
 
-Handler = CustomHTTPRequestHandler
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print("serving at port", PORT)
-    httpd.serve_forever() 
+#Handler = CustomHTTPRequestHandler
+#with socketserver.TCPServer(("", PORT), Handler) as httpd:
+#    print("serving at port", PORT)
+#    httpd.serve_forever() 
+
+if __name__ == "__main__":
+    generate_drums(input_file="C:/Users/akasliwal2/Documents/FYP/Final_Year_project/Dataset/FinalData/test/c/1_funk_80_beat_4-4_31.midi")
