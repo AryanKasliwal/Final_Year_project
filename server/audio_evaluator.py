@@ -13,5 +13,5 @@ def evaluate_generated_track(midi_track_original, midi_track_generated):
             similarity_score += 1
         total_score += 1
         index += 1
-    print(f"{similarity_score * 100 / total_score}%")
+    print(f"Similarity score: {similarity_score * 100 / total_score}%")
     return (similarity_score * 100 / total_score)
