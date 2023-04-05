@@ -1,17 +1,3 @@
-# from midi2audio import FluidSynth
-# import os
-
-# fs = FluidSynth()
-# midi_file='C:/Users/akasliwal2/Documents/FYP/Final_Year_project/Dataset/FinalData/test/c/1_funk_80_beat_4-4_6.midi'
-# audio_file='server/output.wav'
-# if os.path.exists(midi_file):
-#     print("Midi exists")
-# if os.path.exists(audio_file):
-#     print("Wav exists")
-# fs.midi_to_audio(midi_file, audio_file)
-
-# print(fs)
-
 import os, sys, getopt, glob, random, re, subprocess
     
 def is_fsynth_installed():

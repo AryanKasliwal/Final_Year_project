@@ -98,6 +98,45 @@ tf.app.flags.DEFINE_string(
     'The threshold for what messages will be logged DEBUG, INFO, WARN, ERROR, '
     'or FATAL.')
 
+generation_success = True
+
+def generate_drums(
+    run_dir = None,
+    checkpoint_file = None,
+    bundle_file = None,
+    save_generator_bundle = False,
+    bundle_description = None,
+    output_dir = '/tmp/drums_rnn/generated',
+    num_outputs = 10,
+    num_steps = 128,
+    primer_drums = '',
+    primer_midi = '',
+    qpm = None,
+    temperature = 1.0,
+    beam_size = 1,
+    branch_factor = 1,
+    steps_per_iteration = 1,
+    log = 'INFO'
+):
+  FLAGS.run_dir = run_dir
+  FLAGS.checkpoint_file = checkpoint_file
+  FLAGS.bundle_file = bundle_file
+  FLAGS.save_generator_bundle = save_generator_bundle
+  FLAGS.bundle_description = bundle_description
+  FLAGS.output_dir = output_dir
+  FLAGS.num_outputs = num_outputs
+  FLAGS.num_steps = num_steps
+  FLAGS.primer_drums = primer_drums
+  FLAGS.primer_midi = primer_midi
+  FLAGS.qpm = qpm
+  FLAGS.temperature = temperature
+  FLAGS.beam_size = beam_size
+  FLAGS.branch_factor = branch_factor
+  FLAGS.steps_per_iteration = steps_per_iteration
+  FLAGS.log = log
+  tf.disable_v2_behavior()
+  return main()
+
 
 def get_checkpoint():
   """Get the training dir or checkpoint path to be used by the model."""
@@ -137,6 +176,7 @@ def run_with_flags(generator):
   Args:
     generator: The DrumsRnnSequenceGenerator to use for generation.
   """
+  global generation_success
   if not FLAGS.output_dir:
     tf.logging.fatal('--output_dir required')
     return
@@ -187,12 +227,15 @@ def run_with_flags(generator):
         end_time=total_seconds)
 
     if generate_section.start_time >= generate_section.end_time:
-      tf.logging.fatal(
+      generation_success = False
+      tf.logging.warning(
           'Priming sequence is longer than the total number of steps '
           'requested: Priming sequence length: %s, Generation length '
           'requested: %s',
           generate_section.start_time, total_seconds)
-      return
+      return generation_success
+    else:
+      generation_success = True
   else:
     input_sequence = music_pb2.NoteSequence()
     input_sequence.tempos.add().qpm = qpm
@@ -220,9 +263,10 @@ def run_with_flags(generator):
 
   tf.logging.info('Wrote %d MIDI files to %s',
                   FLAGS.num_outputs, FLAGS.output_dir)
+  return generation_success
 
 
-def main(unused_argv):
+def main():
   """Saves bundle or runs generator based on flags."""
   tf.logging.set_verbosity(FLAGS.log)
 
@@ -252,7 +296,7 @@ def main(unused_argv):
     tf.logging.info('Saving generator bundle to %s', bundle_filename)
     generator.create_bundle_file(bundle_filename, FLAGS.bundle_description)
   else:
-    run_with_flags(generator)
+    return run_with_flags(generator)
 
 
 def console_entry_point():
