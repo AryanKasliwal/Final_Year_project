@@ -3,8 +3,7 @@ import socketserver
 import os
 import shutil
 from drums_rnn.drums_rnn_generate import generate_drums
-from flask import Flask, jsonify, render_template, request, redirect, url_for, send_from_directory, send_file
-import sched, time
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -21,6 +20,7 @@ rnn_checkpoint_dir = r'server/drums_rnn/logdir/final_run'
 @app.route("/upload", methods=['POST'])
 def upload():
     if request.method == 'POST':
+        print("Request received")
         file = request.files["file"]
         print(type(file))
         filename = r".\received_file.midi"
@@ -52,7 +52,7 @@ def get_names():
 
 @app.route("/download", methods=['GET'])
 def send_files():
-    zip_path = r".\Generated_files.zip"
+    zip_path = r"..\Generated_files.zip"
     delete_file(zip_path)
     shutil.make_archive(zip_dir, 'zip', generation_dir)
     return send_file(zip_path, mimetype='application/zip', as_attachment=True, download_name="Generated_tracks.zip")
