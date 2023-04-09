@@ -10,7 +10,7 @@ mido==1.2.6
 mpi4py==3.0.3
 note_seq==0.0.3
 numpy==1.21.6
-Pillow==9.5.0
+Pillow==9.2.0
 scikit_learn==1.2.2
 soundfile==0.12.1
 tensorboardX==2.6
