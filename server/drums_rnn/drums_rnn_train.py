@@ -60,8 +60,28 @@ tf.app.flags.DEFINE_string('log', 'INFO',
                            'The threshold for what messages will be logged '
                            'DEBUG, INFO, WARN, ERROR, or FATAL.')
 
+def train_rnn(
+    run_dir = '/logdir/run2',
+    sequence_example_file = '',
+    num_training_steps = 0,
+    num_eval_examples = 0,
+    summary_frequency = 10,
+    num_checkpoints = 10,
+    eval = False,
+    log = 'INFO'
+):
+  FLAGS.run_dir = run_dir
+  FLAGS.sequence_example_file = sequence_example_file
+  FLAGS.num_training_steps = num_training_steps
+  FLAGS.num_eval_examples = num_eval_examples
+  FLAGS.summary_frequency = summary_frequency
+  FLAGS.num_checkpoints = num_checkpoints
+  FLAGS.eval = eval
+  FLAGS.log = log
+  tf.disable_v2_behavior()
+  return main()
 
-def main(unused_argv):
+def main():
   tf.logging.set_verbosity(FLAGS.log)
 
   if not FLAGS.run_dir:
